@@ -6,6 +6,9 @@
       <%= @restaurant.name %>
     </h2>
 
+    <div class="star-rating" data-score= <%= @avg_rating %> ></div>
+    <p><%= "#{@reviews.length} reviews" %></p>
+
     <p>
     <strong>Address:</strong>
     <%= @restaurant.address %>
@@ -28,10 +31,18 @@
     <% if @reviews.blank? %>
       <h3>No reviews yet. Be the first to write one!</h3>
     <% else %>
-      <% @reviews.each do |review| %>
-        <div class="star-rating" data-score= <%= review.rating %> ></div>
-        <p><%= review.comment %></p>
-      <% end %>
+      <table class="table">
+        <tbody>
+          <% @reviews.each do |review| %>
+            <tr>
+              <td>
+                <div class="star-rating" data-score= <%= review.rating %> ></div>
+                <p><%= h(review.comment).gsub(/\n/, '<br/>').html_safe %></p>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     <% end %>
   </div>
 </div>
@@ -39,7 +50,7 @@
 <%= link_to 'Edit', edit_restaurant_path(@restaurant), class: "btn btn-link" %> |
 <%= link_to 'Back', restaurants_path, class: "btn btn-link" %>
 
-  <script>
+<script>
 $('.star-rating').raty({
   path: 'https://s3.amazonaws.com/bryelp/stars',
   readOnly: true,
@@ -47,4 +58,4 @@ $('.star-rating').raty({
     return $(this).attr('data-score');
   }
 });
-  </script>
+</script>
